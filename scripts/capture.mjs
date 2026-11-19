@@ -61,8 +61,9 @@ try {
       throw new Error(`${scene.name}: scene not ready: ${JSON.stringify(details.result.value)} ${problems.join('; ')}`);
     }
     await pause(100);
-    const png = await send('Runtime.evaluate', { expression: `(()=>{const canvas=document.getElementById('cover');const encoded=canvas.toDataURL('image/png');return {header:encoded.slice(0,30),bytes:atob(encoded.split(',')[1]).length,width:canvas.width,height:canvas.height}})()`, returnByValue: true });
-    if (!png.result.value.header.startsWith('data:image/png;base64,') || png.result.value.bytes < 1000) throw new Error(`${scene.name}: PNG export path failed ${JSON.stringify(png.result.value)}`);
+    const png = await send('Runtime.evaluate', { expression: `(()=>{const canvas=document.getElementById('cover');const encoded=canvas.toDataURL('image/png');const raw=atob(encoded.split(',')[1]);return {header:encoded.slice(0,30),signature:Array.from({length:8},(_,i)=>raw.charCodeAt(i)),bytes:raw.length,width:canvas.width,height:canvas.height}})()`, returnByValue: true });
+    const signature = [137, 80, 78, 71, 13, 10, 26, 10];
+    if (!png.result.value.header.startsWith('data:image/png;base64,') || png.result.value.bytes < 1000 || signature.some((byte, index) => png.result.value.signature[index] !== byte)) throw new Error(`${scene.name}: PNG export path failed ${JSON.stringify(png.result.value)}`);
     const image = await send('Page.captureScreenshot', { format: 'jpeg', quality: 82, fromSurface: true, captureBeyondViewport: false });
     await writeFile(`screenshots/${scene.name}`, Buffer.from(image.data, 'base64'));
     if (problems.length) throw new Error(`${scene.name}: ${problems.join('; ')}`);
