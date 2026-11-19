@@ -3,20 +3,57 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<meta name="theme-color" content="#111318">
+<title>Vice Cover Studio — make a scene</title>
 <link rel="stylesheet" href="./style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111218'/%3E%3Cpath d='M5 7h22v5H10v4h14v5H10v4H5z' fill='%23f15a9c'/%3E%3C/svg%3E">
 </head>
 <body>
-<main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+<main class="studio">
+  <header class="topbar"><a class="brand" href="#"><span class="brand-mark">VC</span><span>VICE COVER <b>STUDIO</b></span></a><span class="offline"><i></i> PRIVATE · OFFLINE</span></header>
+  <section class="workspace">
+    <aside class="rail">
+      <div class="eyebrow">01 / YOUR STORY</div>
+      <h1>Make a<br><em>scene.</em></h1>
+      <p class="lede">Your city. Your frame. A cover that looks like the night has a soundtrack.</p>
+      <div class="control-block">
+        <div class="field-head"><label for="photos">PHOTO LIBRARY</label><span id="photo-count">2 loaded</span></div>
+        <label class="upload" for="photos"><span class="upload-plus">＋</span><span><b>Add photos</b><small>Files stay on this device</small></span><input id="photos" type="file" accept="image/*" multiple></label>
+        <label class="field-label" for="assign">ASSIGN TO PANEL <span id="active-label">01</span></label>
+        <select id="assign" aria-label="Assign a photo to the selected panel"></select>
+        <button id="fill-all" class="quiet-button" type="button">↗ &nbsp;Use first photo in every panel</button>
+      </div>
+      <div class="control-block layout-block">
+        <div class="field-head"><span>COMPOSITION</span><span class="step-dot">02</span></div>
+        <div class="segmented" id="layouts"><button data-layout="classic" class="selected">Classic</button><button data-layout="strip">Hero strip</button><button data-layout="poster">Poster</button></div>
+      </div>
+      <div class="control-block grade-block">
+        <div class="field-head"><span>COLOR STORY</span><span class="step-dot">03</span></div>
+        <div class="grade-grid" id="grades"><button data-grade="sunset" class="grade-chip selected"><i class="swatch sunset-swatch"></i>Sunset</button><button data-grade="neon" class="grade-chip"><i class="swatch neon-swatch"></i>Neon</button><button data-grade="vice" class="grade-chip"><i class="swatch vice-swatch"></i>Vice</button><button data-grade="noir" class="grade-chip"><i class="swatch noir-swatch"></i>Noir</button></div>
+      </div>
+      <div class="control-block caption-block">
+        <div class="field-head"><label for="title">THE HEADLINE</label><span class="step-dot">04</span></div>
+        <input id="title" type="text" maxlength="30" value="AFTER HOURS" aria-label="Cover title">
+        <input id="subtitle" type="text" maxlength="44" value="MIAMI NEVER SLEEPS" aria-label="Cover subtitle">
+        <div class="caption-options"><div class="segmented compact" id="caption-position"><button data-position="bottom" class="selected">Bottom</button><button data-position="top">Top</button></div><label class="size-control">TYPE <input id="type-size" type="range" min="70" max="160" value="124"></label></div>
+      </div>
+    </aside>
+    <section class="stage" aria-label="Live cover preview">
+      <div class="stage-head"><div><span class="live-dot"></span> LIVE PREVIEW <span class="stage-hint">· CLICK A PANEL TO EDIT</span></div><div class="panel-count" id="panel-count">01 — 04</div></div>
+      <div class="canvas-wrap"><canvas id="cover" width="1080" height="1080" aria-label="Live multi-panel cover art"></canvas><div class="canvas-corner corner-tl"></div><div class="canvas-corner corner-br"></div></div>
+      <div class="stage-foot"><span id="photo-credit">LOCAL PHOTOS · NEVER UPLOADED</span><label class="zoom-control">PANEL ZOOM <input id="zoom" type="range" min="100" max="220" value="100"><span id="zoom-label">1.0×</span></label></div>
+    </section>
+    <aside class="export-rail">
+      <div class="export-intro"><span class="eyebrow">05 / TAKE IT WITH YOU</span><h2>Ready for<br><em>the feed.</em></h2><p>Three frames. One unmistakable night.</p></div>
+      <label class="field-label" for="size">EXPORT FORMAT</label>
+      <select id="size"><option value="square">Square <span>1080 × 1080</span></option><option value="portrait">Portrait · 4:5</option><option value="landscape" selected>Landscape · 16:9</option></select>
+      <div class="format-preview" id="format-preview"><span>1920</span><i></i><span>1080</span></div>
+      <button id="export" class="export-button" type="button"><span>Export PNG</span><b>↗</b></button>
+      <p class="export-note">FULL RES · NO WATERMARK</p>
+      <div id="status" role="status" aria-live="polite"></div>
+      <div class="rail-stamp"><span>VC</span><small>VOL. 01<br>305 AFTER DARK</small></div>
+    </aside>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
